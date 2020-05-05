@@ -26,7 +26,7 @@ wss.on("connection", ws => {
 
         console.log("Received message: %s from client", msg);
 
-        const { type, name } = data;
+        const { type } = data;
 
         const messageHandler = messageHandlers[type];
 
@@ -40,7 +40,7 @@ wss.on("connection", ws => {
             return;
         }
 
-        messageHandler(users, name, ws);
+        messageHandler(users, data, ws);
     })
 
     ws.send(

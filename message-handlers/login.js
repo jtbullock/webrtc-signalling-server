@@ -1,8 +1,10 @@
-
 const { v4: uuidv4 } = require("uuid");
 const socketHelpers = require("../socket-helpers");
 
-const handler = (users, name, ws) => {
+const handler = (users, data, ws) => {
+
+    const {name} = data;
+
     if (users[name]) {
         socketHelpers.sendTo(ws, {
             type: "login",
@@ -17,6 +19,7 @@ const handler = (users, name, ws) => {
             .map(({ id, name: userName }) => ({ id, userName }));
 
         users[name] = ws;
+
         ws.name = name;
         ws.id = id;
 
@@ -29,6 +32,6 @@ const handler = (users, name, ws) => {
         socketHelpers.sendToAll(users, "updateUsers", ws);
 
     }
-}
+};
 
 module.exports = handler;

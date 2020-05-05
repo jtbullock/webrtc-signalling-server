@@ -3,7 +3,7 @@ const WebSocket = require("ws");
 const http = require("http");
 const app = express();
 const messageHandlers = require("./message-handlers");
-const { sendTo } = require("./socket-helpers");
+const { sendTo, sendToAll } = require("./socket-helpers");
 
 const port = process.env.PORT || 9000;
 
@@ -42,6 +42,11 @@ wss.on("connection", ws => {
 
         messageHandler(users, data, ws);
     })
+
+    ws.on("close", () => {
+        delete users[ws.name];
+        sendToAll(users, "leave", ws);
+    });
 
     ws.send(
         JSON.stringify({

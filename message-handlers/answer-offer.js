@@ -8,6 +8,7 @@ const handler = (users, data, ws) => {
     if(!!answerRecipient) {
         socketHelpers.sendTo(answerRecipient, {
             type: "answer",
+            name,
             answer
         });
     }

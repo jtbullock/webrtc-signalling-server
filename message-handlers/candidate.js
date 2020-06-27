@@ -7,7 +7,7 @@ const handler = (users, data, ws) => {
     if(!!candidateRecipient) {
         socketHelpers.sendTo(candidateRecipient, {
             type: "candidate",
-	    name,
+	          name: ws.name,
             candidate
         });
     }

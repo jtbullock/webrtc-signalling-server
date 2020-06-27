@@ -15,7 +15,7 @@ const handler = (users, data, ws) => {
     }
     else {
         socketHelpers.sendTo(ws, {
-            type: "error", 
+            type: "error",
             message: `User ${name} does not exist!`
         });
     }

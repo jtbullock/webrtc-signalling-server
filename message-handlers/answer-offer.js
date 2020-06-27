@@ -8,8 +8,8 @@ const handler = (users, data, ws) => {
     if(!!answerRecipient) {
         socketHelpers.sendTo(answerRecipient, {
             type: "answer",
-            name,
-			isAccepted,
+            name: ws.name,
+			      isAccepted,
             answer
         });
     }

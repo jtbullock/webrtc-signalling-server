@@ -5,7 +5,8 @@ const app = express();
 const messageHandlers = require("./message-handlers");
 const { sendTo, sendToAll } = require("./socket-helpers");
 
-const port = process.env.PORT || 9000;
+// const port = process.env.PORT || 9000;
+const port = 80;
 
 const server = http.createServer(app);
 
@@ -55,6 +56,8 @@ wss.on("connection", ws => {
         })
     );
 });
+
+app.get('/', (req, res) => res.send('Web socket server running'));
 
 server.listen(port, () => {
     console.log(`Signalling Server running on port: ${port}`);

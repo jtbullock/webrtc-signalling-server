@@ -13,7 +13,12 @@ const wss = new WebSocket.Server({ server });
 
 let users = {};
 
+WebSocket.sendTo = () => console.log('Send to called');
+
 wss.on("connection", ws => {
+
+    console.log(ws.sendTo());
+
     ws.on("message", msg => {
         let data;
 

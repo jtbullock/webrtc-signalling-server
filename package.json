@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -recursive"
   },
   "author": "Josh Bullock",
   "license": "ISC",
@@ -13,5 +13,8 @@
     "express": "^4.17.1",
     "uuid": "^8.0.0",
     "ws": "^7.2.5"
+  },
+  "devDependencies": {
+    "mocha": "^8.0.1"
   }
 }

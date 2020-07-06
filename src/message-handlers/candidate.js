@@ -1,19 +1,17 @@
 const handler = (socketData, message) => {
     const {name, candidate} = message;
+    const {helpers} = socketData;
     const candidateRecipient = socketData.users[name];
 
-    if (!!candidateRecipient) {
-        socketData.helpers.sendTo(candidateRecipient, {
-            type: "candidate",
-            name: socketData.socket.name,
-            candidate
-        });
-    } else {
-        socketData.helpers.replyToCaller({
-            type: "error",
-            message: `User ${name} does not exist!`
-        });
+    if (helpers.notifyCallerIfUnknownUser(candidateRecipient, name)) {
+        return;
     }
+
+    socketData.helpers.sendTo(candidateRecipient, {
+        type: "candidate",
+        name: socketData.socket.name,
+        candidate
+    });
 };
 
 module.exports = handler;

@@ -1,43 +1,41 @@
 const express = require("express");
 const WebSocket = require("ws");
 const http = require("http");
-const app = express();
+
 const messageHandlers = require("./message-handlers");
-const { sendTo, sendToAll } = require("./socket-helpers");
+const SocketData = require('./socket-data');
 
 const port = process.env.PORT || 9000;
 
+const app = express();
 const server = http.createServer(app);
-
-const wss = new WebSocket.Server({ server });
+const socketServer = new WebSocket.Server({ server });
 
 let users = {};
 
-WebSocket.sendTo = () => console.log('Send to called');
+socketServer.on("connection", webSocket => {
 
-wss.on("connection", ws => {
+    const socketData = new SocketData(webSocket, users);
 
-    console.log(ws.sendTo());
-
-    ws.on("message", msg => {
-        let data;
+    webSocket.on("message", message => {
+        let messageJson;
 
         try {
-            data = JSON.parse(msg);
+            messageJson = JSON.parse(message);
         } catch (e) {
             console.log("Invalid JSON Received");
-            data = {};
+            messageJson = {};
         }
 
-        console.log("Received message: %s from client", msg);
+        console.log("Received message: %s from client", message);
 
-        const { type } = data;
+        const { type } = messageJson;
 
         const messageHandler = messageHandlers[type];
 
         if(!messageHandler)
         {
-            sendTo(ws, {
+            socketData.helpers.sendTo(webSocket, {
                 type: "error",
                 message: "Command not found: " + type
             });
@@ -45,15 +43,15 @@ wss.on("connection", ws => {
             return;
         }
 
-        messageHandler(users, data, ws);
+        messageHandler(socketData, messageJson);
     })
 
-    ws.on("close", () => {
-        delete users[ws.name];
-        sendToAll(users, "leave", ws);
+    webSocket.on("close", () => {
+        delete users[webSocket.name];
+        socketData.helpers.sendToAll(users, "leave", webSocket);
     });
 
-    ws.send(
+    webSocket.send(
         JSON.stringify({
             type: "connect",
             message: "Well hello there, I am a WebSocket server"

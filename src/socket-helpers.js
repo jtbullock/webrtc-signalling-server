@@ -11,7 +11,6 @@ const sendTo = (connection, message) => {
 };
 
 const sendToAll = (socket, users, type) => {
-
     const {id, name: userName} = socket;
 
     Object.values(users).forEach(client => {

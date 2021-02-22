@@ -16,6 +16,7 @@
     "ws": "^7.2.5"
   },
   "devDependencies": {
+    "jasmine": "^3.5.0",
     "mocha": "^8.0.1",
     "nodemon": "^2.0.4"
   }
